@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light dark">
+<title>Barrierefreiheit – {{name}}</title>
+<script src="kopf.js?v={{version}}"></script>
+<link rel="stylesheet" href="h5p-archiv.css?v={{version}}">
+<script src="seite.js?v={{version}}" defer></script>
+</head>
+<body class="text-seite">
+<a class="skip" href="#inhalt">Zum Inhalt springen</a>
+{{kopf}}
+<main class="innen" id="inhalt">
+  <h1>Erklärung zur Barrierefreiheit</h1>
+  <!-- VORLAGE: an die Vorgaben Ihres Landes anpassen (z. B. BITV 2.0 / Landesverordnung) und Datum, Kontakt und
+       Durchsetzungsstelle eintragen. Die Angaben unten beschreiben den Stand der Software „Übungsheft“. -->
+  <p>[Name der Schule] ist bemüht, diese Website im Einklang mit den Vorschriften zur Barrierefreiheit
+    ([Landesgesetz / Verordnung]) barrierefrei zugänglich zu machen.</p>
+
+  <h2>Stand der Vereinbarkeit</h2>
+  <p>Die Website ist mit den Anforderungen (EN 301 549 bzw. WCAG 2.2 Stufe AA) <strong>teilweise vereinbar</strong>.
+    Die Seiten selbst (Übersicht, Suche, Übungsseite, diese Erklärung) wurden geprüft und erfüllen die Anforderungen.
+    Die Übungen sind Inhalte Dritter; bei ihnen gibt es Einschränkungen:</p>
+  <ul>
+    <li>Einzelne Übungsarten (z. B. Drag &amp; Drop, Bild-Hotspots, Memory) sind mit Tastatur oder Screenreader nur
+      eingeschränkt bedienbar; das liegt an den H5P-Bibliotheken selbst.</li>
+    <li>Bilder in Übungen haben teils keine Textalternative, Videos teils keine Untertitel.</li>
+    <li>Videos von YouTube und eingebettete fremde Webseiten folgen den Regeln des jeweiligen Anbieters.</li>
+  </ul>
+
+  <h2>Erstellung dieser Erklärung</h2>
+  <p>Die Erklärung wurde am [Datum] erstellt. Grundlage ist eine Selbstbewertung mit automatischen Prüfwerkzeugen
+    (axe, Lighthouse) und manuellen Prüfungen (Tastaturbedienung, Zoom bis 400 %, Textabstände, Kontraste in
+    hellem und dunklem Modus, reduzierte Bewegung).</p>
+
+  <h2>Barrieren melden</h2>
+  <p>Ist Ihnen eine Barriere aufgefallen? Schreiben Sie uns: [E-Mail-Adresse], [Telefon].</p>
+
+  <h2>Durchsetzungsverfahren</h2>
+  <p>Wenn Sie auf Ihre Meldung keine zufriedenstellende Antwort erhalten, können Sie sich an die zuständige
+    Durchsetzungs- bzw. Schlichtungsstelle wenden: [Stelle Ihres Landes mit Kontaktdaten].</p>
+</main>
+{{fuss}}
+</body>
+</html>

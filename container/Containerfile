@@ -1,0 +1,15 @@
+# Sammler: holt die Übungen und baut die Webseite in den Bestand (/bestand). Nur Python-Standardbibliothek.
+# Läuft im Container als root, damit er das gemeinsame Volume immer beschreiben kann (Podman/Docker übernehmen
+# neue Volumes teils für den Benutzer des zuerst startenden Containers). Er öffnet keine Ports; bei rootless
+# Podman ist „root“ im Container der normale Benutzer auf dem Server.
+FROM docker.io/library/python:3.13-alpine
+WORKDIR /app
+COPY uebungsheft.py ./
+COPY vorlagen ./vorlagen
+COPY vendor ./vendor
+COPY katalog ./katalog
+COPY konfig ./konfig
+ENV UEBUNGSHEFT_BESTAND=/bestand PYTHONUNBUFFERED=1
+VOLUME /bestand
+ENTRYPOINT ["python3", "-B", "/app/uebungsheft.py"]
+CMD ["alles"]

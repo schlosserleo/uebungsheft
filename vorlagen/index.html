@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light dark">
+<title>{{name}} – interaktive Übungen für die Schule</title>
+<meta name="description" content="Interaktive Übungen aus dem ehemaligen Landesbildungsserver Baden-Württemberg: Quizze, Lückentexte, Zuordnungen und Lernkarten, direkt im Browser.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 32'%3E%3Crect width='26' height='32' rx='3' fill='%232346c8'/%3E%3Crect width='5' height='32' rx='2' fill='%231a35a0'/%3E%3Crect x='8' y='11' width='14' height='9' rx='1.5' fill='white'/%3E%3C/svg%3E">
+<link rel="preload" href="schriften/bricolage-grotesque-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="schriften/atkinson-hyperlegible-next-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script src="kopf.js?v={{version}}"></script>
+<link rel="stylesheet" href="h5p-archiv.css?v={{version}}">
+<script src="uebungen.js?v={{version}}" defer></script>
+<script src="seite.js?v={{version}}" defer></script>
+</head>
+<body>
+<a class="skip" href="#uebungen">Zu den Übungen springen</a>
+
+{{kopf}}
+
+<main>
+  <section class="buehne-start karopapier" aria-labelledby="titel">
+    <div class="innen">
+      <h1 id="titel">Interaktive Übungen für die Schule</h1>
+      <p class="unterzeile" id="unterzeile">Übungen aus dem ehemaligen Landesbildungsserver Baden-Württemberg:
+        Quizze, Lückentexte, Zuordnungen, Lernkarten und mehr. Alles läuft direkt im Browser, ohne Anmeldung.</p>
+      <search class="suchzeile">
+        <div class="suchfeld">
+          <label for="suche" class="sr-only">Übungen durchsuchen</label>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+          <input type="search" id="suche" placeholder="Thema, Begriff oder Titel" autocomplete="off" enterkeyhint="search">
+        </div>
+        <a class="knopf" id="zufall" href="spielen.html">Zufällige Übung</a>
+      </search>
+    </div>
+  </section>
+
+  <div class="innen" id="liste-bereich" data-laedt>
+    <section class="faecher" aria-labelledby="faecher-titel" id="faecher-bereich" hidden>
+      <h2 id="faecher-titel">Fächer</h2>
+      <div class="faecher-gruppen" id="faecher"></div>
+    </section>
+
+    <section class="arten arten-zeile" aria-labelledby="arten-titel">
+      <h2 id="arten-titel">Übungsarten</h2>
+      <ul id="arten"></ul>
+      <ul id="unterarten" class="unterarten" aria-label="Übungsarten in diesem Bereich" hidden></ul>
+    </section>
+
+    <section id="uebungen" tabindex="-1" aria-labelledby="treffer">
+      <div class="werkzeuge">
+        <div>
+          <h2 class="treffer" id="treffer" aria-live="polite">Übungen</h2>
+          <button type="button" class="knopf-link" id="zuruecksetzen" hidden>Alle Übungen zeigen</button>
+        </div>
+        <div class="auswahl">
+          <label>Sortieren <select id="sortierung">
+            <option value="neu">Neueste zuerst</option>
+            <option value="alt">Älteste zuerst</option>
+            <option value="titel">Titel A–Z</option>
+          </select></label>
+        </div>
+      </div>
+
+      <ul class="hefte" id="hefte"></ul>
+      <div class="leer" id="leer" hidden>
+        <h2>Keine Übung gefunden</h2>
+        <p>Versuch es mit einem anderen Begriff oder mit allen Übungsarten.</p>
+        <button type="button" class="knopf" id="leer-zuruecksetzen">Alle Übungen zeigen</button>
+      </div>
+      <nav aria-label="Seiten"><ul class="seiten" id="seiten"></ul></nav>
+      <noscript><div class="leer"><h2>JavaScript ist ausgeschaltet</h2><p>Die Übungen brauchen JavaScript. Bitte schalte es für diese Seite ein.</p></div></noscript>
+    </section>
+  </div>
+</main>
+
+{{fuss}}
+
+<script src="index.js?v={{version}}" defer></script>
+</body>
+</html>

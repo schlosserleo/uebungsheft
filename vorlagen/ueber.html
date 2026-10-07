@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light dark">
+<title>Über das Archiv – {{name}}</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 32'%3E%3Crect width='26' height='32' rx='3' fill='%232346c8'/%3E%3Crect width='5' height='32' rx='2' fill='%231a35a0'/%3E%3Crect x='8' y='11' width='14' height='9' rx='1.5' fill='white'/%3E%3C/svg%3E">
+<script src="kopf.js?v={{version}}"></script>
+<link rel="stylesheet" href="h5p-archiv.css?v={{version}}">
+<script src="uebungen.js?v={{version}}" defer></script>
+<script src="seite.js?v={{version}}" defer></script>
+</head>
+<body class="text-seite">
+<a class="skip" href="#inhalt">Zum Inhalt springen</a>
+
+{{kopf}}
+
+<main class="innen" id="inhalt" data-laedt>
+  <h1>Über das Archiv</h1>
+  <p class="einleitung">Der Landesbildungsserver Baden-Württemberg (schule-bw.de) wurde am 30. September 2026
+    abgeschaltet. Seine interaktiven Übungen lagen auf einem eigenen Server, der danach noch kurz erreichbar war.
+    Von dort wurden sie gesichert und laufen hier weiter.</p>
+
+  <h2>Bestand</h2>
+  <table class="zahlen" id="bestand"><tbody></tbody></table>
+
+  <h2>Übungsarten</h2>
+  <table class="zahlen" id="arten"><tbody></tbody></table>
+
+  <h2>Für Lehrkräfte</h2>
+  <p>Auf der Seite jeder Übung gibt es die Original-Datei zum Herunterladen (<code>.h5p</code>). Sie enthält die
+    komplette Übung mit allen Bildern und lässt sich in Moodle, ILIAS, WordPress oder der kostenlosen App
+    <a href="https://app.lumi.education/">Lumi</a> importieren, anpassen und im eigenen Kurs verwenden.</p>
+  <p>Alle Übungen mit Titel, Übungsart und Autor:innen stehen auch in einer Tabelle:
+    <a href="h5p.csv" download>Übungsliste herunterladen (CSV)</a>.</p>
+
+  <h2>Wie das Archiv entstanden ist</h2>
+  <ul>
+    <li>Jede Übung wurde als unveränderte Original-Datei vom Server gesichert, mit Inhalt, Bildern und allem,
+      was zum Abspielen nötig ist.</li>
+    <li>Videos, die nur verlinkt waren (auf dem Videoportal der Lehrerfortbildung), wurden mitgesichert.
+      YouTube-Videos werden weiterhin von YouTube geladen.</li>
+    <li>Die Fächer stammen von den Fachseiten auf schule-bw.de, in die eine Übung eingebettet war. Diese Seiten
+      werden nach und nach aus der Wayback Machine gelesen. Bis dahin, und für Übungen, die nie eingebettet waren,
+      ist das Fach anhand von Titel und Inhalt der Übung zugeordnet.</li>
+    <li>Übungen, die der Server nicht mehr vollständig herausgab, wurden aus Resten und aus der Wayback Machine
+      des Internet Archive wiederhergestellt. Dort können einzelne Bilder oder Töne fehlen; diese Übungen
+      sind als „teilweise wiederhergestellt“ gekennzeichnet.</li>
+  </ul>
+
+  <h2>Rechte</h2>
+  <p>{{rechte}}</p>
+
+  <h2>Technik</h2>
+  <p>Die Übungen laufen mit <a href="https://github.com/tunapanda/h5p-standalone">h5p-standalone</a> (MIT-Lizenz)
+    direkt im Browser. Schriften: Bricolage Grotesque und Atkinson Hyperlegible Next (SIL Open Font License),
+    vom eigenen Server geladen. Nur Übungen mit mathematischen Formeln laden zusätzlich MathJax von cdnjs.</p>
+  <p id="stand"></p>
+</main>
+
+{{fuss}}
+
+<script src="ueber.js?v={{version}}" defer></script>
+</body>
+</html>

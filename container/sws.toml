@@ -1,0 +1,31 @@
+# static-web-server für den Bestand (bestand/seite). Doku: https://static-web-server.net
+[general]
+host = "::"
+port = 8080
+root = "/bestand/seite"
+log-level = "error"
+cache-control-headers = true
+compression = true
+compression-static = true
+directory-listing = false
+redirect-trailing-slash = true
+health = true
+
+[advanced]
+
+# Seiten und Liste ändern sich mit jedem Lauf → immer neu validieren (Player-Bibliotheken bleiben lange im Cache)
+[[advanced.headers]]
+source = "/{,*.html,uebungen.js,h5p.csv}"
+headers = { Cache-Control = "no-cache" }
+
+# Content-Security-Policy: Skripte nur vom eigenen Server; erlaubt sind zusätzlich der feste Einzeiler, den der
+# H5P-Player in seinen Rahmen schreibt (per Hash), und eval (TimelineJS u. a. H5P-Bibliotheken).
+# Fremde Rahmen (YouTube, eingebettete Seiten) lädt die Übungsseite erst nach Zustimmung.
+[[advanced.headers]]
+source = "**"
+[advanced.headers.headers]
+Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-eval' 'sha256-8CniZYrnO46q7MvZ3m08Wom1HH/ZhyXmm29kBKTV1rk=' https://www.youtube.com https://s.ytimg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://i.ytimg.com; font-src 'self' data:; media-src 'self' blob:; frame-src 'self' https:; worker-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+X-Content-Type-Options = "nosniff"
+Referrer-Policy = "strict-origin-when-cross-origin"
+Permissions-Policy = "geolocation=(), microphone=(self), camera=()"
+X-Robots-Tag = "noindex, nofollow"

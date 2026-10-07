@@ -1,0 +1,6 @@
+/bestand/
+__pycache__/
+*.part
+.laden-*.h5p
+/konfig/seiten/
+/.env

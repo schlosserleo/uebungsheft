@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light dark">
+<title>Übung – {{name}}</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 32'%3E%3Crect width='26' height='32' rx='3' fill='%232346c8'/%3E%3Crect width='5' height='32' rx='2' fill='%231a35a0'/%3E%3Crect x='8' y='11' width='14' height='9' rx='1.5' fill='white'/%3E%3C/svg%3E">
+<script src="kopf.js?v={{version}}"></script>
+<link rel="preload" href="schriften/bricolage-grotesque-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="h5p-archiv.css?v={{version}}">
+<script src="uebungen.js?v={{version}}" defer></script>
+<script src="seite.js?v={{version}}" defer></script>
+<script src="player/standalone/main.bundle.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#blatt">Zur Übung springen</a>
+
+{{kopf}}
+
+<main class="innen" id="inhalt" data-laedt>
+  <nav class="pfad" aria-label="Pfad">
+    <ol><li><a href="./" class="zur-liste">Übungen</a></li><li id="pfad-fach-li" hidden><a href="./" id="pfad-fach">Fach</a></li><li><a href="./" id="pfad-art">Übungsart</a></li></ol>
+  </nav>
+  <div class="uebung-kopf" id="kopf"></div>
+
+  <div id="hinweise"></div>
+  <section class="blatt" id="blatt" tabindex="-1" aria-label="Übung"><div id="h5p-container"></div></section>
+
+  <div class="blatt-leiste" id="leiste">
+    <div class="links">
+      <button type="button" class="knopf" id="neu">Nochmal von vorn</button>
+      <button type="button" class="knopf" id="teilen">Link kopieren</button>
+    </div>
+    <div class="rechts" id="herunterladen"></div>
+  </div>
+
+  <nav class="blaettern" id="blaettern" aria-label="Weitere Übungen"></nav>
+
+  <section class="verwandt" id="verwandt" aria-labelledby="verwandt-titel" hidden>
+    <h2 id="verwandt-titel">Mehr in dieser Übungsart</h2>
+    <ul class="hefte" id="verwandt-liste"></ul>
+  </section>
+</main>
+
+{{fuss}}
+
+<script src="spielen.js?v={{version}}" defer></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+# Übungsheft: Sammler (holt die Übungen, baut die Seite) + Webserver.
+#   podman compose up -d        (oder: docker compose up -d)
+#   Fortschritt: podman compose logs -f sammler
+# Die Seite ist danach unter http://localhost:8080 erreichbar. HTTPS und Login gehören davor (Reverse-Proxy).
+services:
+  sammler:
+    build:
+      context: .
+      dockerfile: container/Containerfile
+    image: localhost/uebungsheft-sammler
+    environment:
+      UEBUNGSHEFT_QUELLE: ${UEBUNGSHEFT_QUELLE:-original}
+      UEBUNGSHEFT_BENUTZER: ${UEBUNGSHEFT_BENUTZER:-}
+      UEBUNGSHEFT_PASSWORT: ${UEBUNGSHEFT_PASSWORT:-}
+    volumes:
+      - bestand:/bestand
+      - ./konfig:/app/konfig:ro,z
+    restart: "no"
+
+  web:
+    image: docker.io/joseluisq/static-web-server:2-alpine
+    # startet nach dem Sammler; bis dieser die erste Seite gebaut hat (Sekunden), startet der Webserver neu
+    depends_on:
+      - sammler
+    environment:
+      SERVER_CONFIG_FILE: /etc/sws.toml
+    volumes:
+      - ./container/sws.toml:/etc/sws.toml:ro,z
+      - bestand:/bestand:ro
+    ports:
+      - "${UEBUNGSHEFT_PORT:-8080}:8080"
+    restart: unless-stopped
+
+volumes:
+  bestand:
