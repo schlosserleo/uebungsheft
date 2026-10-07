@@ -315,6 +315,8 @@ img { max-width: 100%; }
 .text-seite h1 { margin: 48px 0 16px; font-size: clamp(2rem, 1.4rem + 2.4vw, 3.2rem); line-height: 1.05; font-weight: 760; letter-spacing: -.03em; }
 .text-seite h2 { margin: 48px 0 12px; font-size: 1.45rem; letter-spacing: -.02em; }
 .text-seite p, .text-seite li { max-width: 68ch; }
+/* lange deutsche Wörter (Datenschutzerklärung, Aufsichtsbehörde) auf schmalen Bildschirmen trennen */
+.text-seite h1, .text-seite h2, .text-seite p, .text-seite li { -webkit-hyphens: auto; hyphens: auto; overflow-wrap: break-word; }
 .text-seite .einleitung { font-size: 1.2rem; color: var(--tinte-leise); }
 .zahlen { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
 .zahlen th, .zahlen td { padding: 10px 0; border-bottom: 1px solid var(--linie); text-align: left; vertical-align: top; }
