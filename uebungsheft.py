@@ -143,10 +143,12 @@ def verlinke(quelle, ziel):
         shutil.copyfile(quelle, ziel)
 
 
-def kopiere_baum(quelle, ziel, verlinken=False):
+def kopiere_baum(quelle, ziel, verlinken=False, vorhandene_lassen=False):
     for datei in quelle.rglob("*"):
         if datei.is_file():
             neu = ziel / datei.relative_to(quelle)
+            if vorhandene_lassen and neu.exists():
+                continue
             if verlinken:
                 verlinke(datei, neu)
             elif not neu.exists() or neu.stat().st_size != datei.stat().st_size:
@@ -584,7 +586,7 @@ def cmd_holen(args, zwischendurch=None):
             # Bibliotheken einer vorhandenen Player-Installation einmal verlinken (spart das Entpacken)
             for w in (ordner, ordner / "seite"):
                 if (w / "player" / "libs").is_dir():
-                    kopiere_baum(w / "player" / "libs", bestand.libs, verlinken=True)
+                    kopiere_baum(w / "player" / "libs", bestand.libs, verlinken=True, vorhandene_lassen=True)
                     break
             for e in liste:
                 if genug():
