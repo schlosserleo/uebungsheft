@@ -7,8 +7,9 @@
     <search class="kopf-suche">
       <form action="./" method="get">
         <label for="suche" class="sr-only">Übungen durchsuchen</label>
-        <svg class="symbol" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
         <input type="search" id="suche" name="q" placeholder="Thema, Begriff oder Titel" autocomplete="off" enterkeyhint="search">
+        <!-- Lupe als Absende-Knopf: Suche auch per Klick, Sprachsteuerung („Suchen klicken“) und Screenreader auslösbar -->
+        <button type="submit" class="such-knopf" aria-label="Suchen"><svg class="symbol" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></button>
       </form>
     </search>
     <nav class="kopf-navi" aria-label="Hauptnavigation">

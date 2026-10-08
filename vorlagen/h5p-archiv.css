@@ -148,7 +148,12 @@ mark { background: var(--marker); color: var(--graphit); border-radius: 2px; pad
 .logo-umschlag { fill: var(--tinte); } .logo-ruecken { fill: var(--tinte-tief); } .logo-etikett { fill: var(--flaeche); }
 .kopf-suche { flex: 1 1 260px; max-width: 520px; }
 .kopf-suche form { position: relative; margin: 0; }
-.kopf-suche svg { position: absolute; left: 14px; top: 50%; translate: 0 -50%; color: var(--graphit-leise); pointer-events: none; }
+.kopf-suche .such-knopf {
+  position: absolute; left: 4px; top: 50%; translate: 0 -50%; display: grid; place-items: center; width: 40px; height: 40px;
+  padding: 0; border: 0; border-radius: 6px; background: none; color: var(--graphit-leise); cursor: pointer;
+}
+.kopf-suche .such-knopf:hover { color: var(--graphit); }
+.kopf-suche .such-knopf:focus-visible { outline: 3px solid var(--tinte); outline-offset: 0; }
 .kopf-suche input {
   width: 100%; min-height: 48px; padding: 10px 14px 10px 46px;
   font: 500 1.0625rem/1.2 var(--schrift-text); color: var(--graphit);
