@@ -1,35 +1,34 @@
-/* ueber.html – Seitenlogik (ausgelagert für die Content-Security-Policy) */
-document.addEventListener('DOMContentLoaded', function () {
+/* ueber.html – Zahlen zum Bestand (ausgelagert für die Content-Security-Policy) */
+(() => {
   'use strict';
-  var H = window.Heft, el = H.el;
-  var daten = window.H5P_ARCHIV || { uebungen: [], statistik: {} };
-  var liste = daten.uebungen, st = daten.statistik || {};
-  var zahl = new Intl.NumberFormat('de-DE');
+  const H = window.Heft, { el, symbol } = H;
+  const daten = window.H5P_ARCHIV || { uebungen: [], statistik: {} };
+  const liste = daten.uebungen, st = daten.statistik || {};
+  const zahl = n => new Intl.NumberFormat('de-DE').format(n);
 
-  var arten = {};
-  liste.forEach(function (u) { (arten[u.typ] = arten[u.typ] || { n: 0, gruppe: u.gruppe }).n++; });
+  const arten = new Map();
+  for (const u of liste) {
+    const a = arten.get(u.typ) || { n: 0, gruppe: u.gruppe };
+    a.n++;
+    arten.set(u.typ, a);
+  }
 
   function zeile(tbody, kopf, wert) {
-    var tr = el('tr'), th = el('th', { scope: 'row' });
-    if (kopf instanceof Node) th.appendChild(kopf); else th.textContent = kopf;
-    tr.appendChild(th); tr.appendChild(el('td', null, wert)); tbody.appendChild(tr);
+    tbody.append(el('tr', null, el('th', { scope: 'row' }, kopf), el('td', null, wert)));
   }
-  var b = document.querySelector('#bestand tbody');
-  zeile(b, 'Übungen', zahl.format(liste.length));
-  zeile(b, 'Übungsarten', zahl.format(Object.keys(arten).length));
-  zeile(b, 'Davon teilweise wiederhergestellt', zahl.format(liste.filter(function (u) { return u.wayback || u.selbstgebaut; }).length));
-  zeile(b, 'Fach von der Fachseite auf schule-bw.de', zahl.format(st.faecherArtikel || 0));
-  zeile(b, 'Fach nach Inhalt zugeordnet', zahl.format(st.faecherInhalt || 0));
+  const b = document.querySelector('#bestand tbody');
+  zeile(b, 'Übungen', zahl(liste.length));
+  zeile(b, 'Übungsarten', zahl(arten.size));
+  zeile(b, 'Davon teilweise wiederhergestellt', zahl(liste.filter(u => u.wayback || u.selbstgebaut).length));
+  zeile(b, 'Fach von der Fachseite auf schule-bw.de', zahl(st.faecherArtikel || 0));
+  zeile(b, 'Fach nach Inhalt zugeordnet', zahl(st.faecherInhalt || 0));
   zeile(b, 'Original-Dateien (.h5p)', H.groesse(st.exportBytes || 0));
   zeile(b, 'Für den Player entpackt', H.groesse((st.libsBytes || 0) + (st.inhalteBytes || 0)));
-  zeile(b, 'H5P-Bibliotheken (je Version einmal)', zahl.format(st.libsAnzahl || 0));
+  zeile(b, 'H5P-Bibliotheken (je Version einmal)', zahl(st.libsAnzahl || 0));
 
-  var a = document.querySelector('#arten tbody');
-  Object.keys(arten).sort(function (x, y) { return arten[y].n - arten[x].n || x.localeCompare(y, 'de'); }).forEach(function (t) {
-    var name = H.heftfarbe(el('a', { 'class': 'art-marke', href: './?art=' + encodeURIComponent(t) }), arten[t].gruppe);
-    name.appendChild(el('span', { 'class': 'farbe', 'aria-hidden': 'true' }));
-    name.appendChild(el('span', null, t));
-    zeile(a, name, zahl.format(arten[t].n));
+  const a = document.querySelector('#arten tbody');
+  [...arten].sort((x, y) => y[1].n - x[1].n || x[0].localeCompare(y[0], 'de')).forEach(([typ, { n, gruppe }]) => {
+    zeile(a, el('a', { href: './?art=' + encodeURIComponent(typ) }, symbol(gruppe), typ), zahl(n));
   });
 
   document.getElementById('inhalt').removeAttribute('data-laedt');
@@ -38,4 +37,4 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('stand').textContent = 'Stand der Übungsliste: ' +
       new Date(st.erzeugt).toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' }) + '.';
   }
-});
+})();

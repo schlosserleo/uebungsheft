@@ -62,10 +62,17 @@ Ausgeliefert wird nur `bestand/seite/` – mit jedem Webserver. Wichtig sind die
 
 ## Was die Seite kann
 
-- Übungen nach **Fach** (Inhaltsverzeichnis) und **Übungsart** filtern, Volltextsuche über Titel und Aufgabentext,
-  Zufallsübung, Vor/Zurück, verwandte Übungen.
-- **Barrierefreiheit:** geprüft nach WCAG 2.2 AA (axe, Lighthouse, Tastatur, Zoom 400 %, Textabstände, Kontraste
-  hell/dunkel, reduzierte Bewegung). Einschränkungen gibt es innerhalb einzelner H5P-Übungsarten.
+- **Für Schüler:innen gebaut:** Die Startseite ist ein Stundenplan der Fächer (Kürzel, Heftfarben). Im Fach nach
+  Übungsart filtern, Volltextsuche über Titel und Aufgabentext mit markierten Treffern, Zufallsübung (auch je Fach).
+- **Übungsseite im Fokus:** das Blatt in der Mitte; nach dem Lösen stehen darunter die Punkte und die nächste Übung
+  im Fach. Die Punkte kommen aus den xAPI-Meldungen der Übung und werden nirgends gespeichert. Datei und
+  Einbett-Adresse stehen unter „Für Lehrkräfte“.
+- **Aktuelle Browser-Technik, wo vorhanden:** Seitenübergänge (View Transitions), Vorladen einer Übung, sobald der
+  Zeiger auf ihr ruht (Speculation Rules), Ansichtswechsel ohne Neuladen (Navigation API), anpassbare Auswahllisten.
+  Ältere Browser bekommen dieselbe Seite ohne diese Extras.
+- **Barrierefreiheit:** geprüft nach WCAG 2.2 AA (axe in allen Ansichten hell/dunkel, Tastatur und Fokus, 320 px
+  Breite bzw. Zoom 400 %, Textabstände, reduzierte Bewegung). Einschränkungen gibt es innerhalb einzelner
+  H5P-Übungsarten.
 - **Datenschutz:** keine Cookies, nichts im Browserspeicher, kein Tracking; Schriften und Formeldarstellung kommen
   vom eigenen Server. Videos von YouTube und eingebettete fremde Seiten (wenige Übungen) werden erst nach
   ausdrücklicher Zustimmung geladen. Strenge Content-Security-Policy.

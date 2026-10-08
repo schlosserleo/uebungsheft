@@ -1,17 +1,9 @@
-/* Übungsheft – gemeinsames Stylesheet (index.html, spielen.html, ueber.html)
-   Leitidee: Schulheft. Karopapier im Kopf, jede Übung ist ein Heftumschlag in der Farbe ihrer Übungsart.
-   Dunkel: Schultafel. */
+/* Übungsheft – gemeinsames Stylesheet (index.html, spielen.html, ueber.html und eigene Seiten)
+   Leitidee: Stundenplan und Schulheft. Jedes Fach hat seine Heftfarbe; Fächerkürzel und Überschriften stehen
+   wie von Hand eingetragen (Playpen Sans), alles andere wie gedruckt (Atkinson Hyperlegible Next).
+   Hell: Papier mit Füllertinte. Dunkel: Schultafel mit Kreide.
+   Grundgerüst läuft in jedem halbwegs aktuellen Browser; Seitenübergänge, Vorladen und Co. kommen obendrauf. */
 
-@font-face {
-  font-family: "Bricolage Grotesque"; font-style: normal; font-display: swap; font-weight: 200 800;
-  src: url("schriften/bricolage-grotesque-latin-wght-normal.woff2") format("woff2-variations");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: "Bricolage Grotesque"; font-style: normal; font-display: swap; font-weight: 200 800;
-  src: url("schriften/bricolage-grotesque-latin-ext-wght-normal.woff2") format("woff2-variations");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
 @font-face {
   font-family: "Atkinson Hyperlegible Next"; font-style: normal; font-display: swap; font-weight: 200 800;
   src: url("schriften/atkinson-hyperlegible-next-latin-wght-normal.woff2") format("woff2-variations");
@@ -22,333 +14,473 @@
   src: url("schriften/atkinson-hyperlegible-next-latin-ext-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
+/* Playpen Sans, auf die Stärken 500–700 und ohne Zeichenvarianten gekürzt (42 statt 196 KB) */
+@font-face {
+  font-family: "Playpen Sans"; font-style: normal; font-display: swap; font-weight: 500 700;
+  src: url("schriften/playpen-sans-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Playpen Sans"; font-style: normal; font-display: swap; font-weight: 500 700;
+  src: url("schriften/playpen-sans-latin-ext-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
 
+/* ------------------------------------------------------------------ Farben und Maße */
 :root {
-  --papier: #fbfcfe;
+  color-scheme: light dark;
+  --papier: #f8f9fb;
   --flaeche: #ffffff;
-  --karo: #dce6f2;
-  --tinte: #1e2a3a;
-  --tinte-leise: #556275;
-  --linie: #d5deea;
-  --blau: #2346c8;
-  --blau-tief: #1a35a0;
-  --blau-hauch: #e8edfb;
-  --hinweis: #6b4a00;
-  --hinweis-grund: #fff4d6;
-  --fehler: #b3261e;
-  --etikett: #ffffff;
-  --etikett-tinte: #1e2a3a;
-  --marker: #ffe36e;
+  --graphit: #1d2230;
+  --graphit-leise: #535b6b;
+  --linie: #d7dce5;
+  --linie-stark: #8d96a6;
+  --karo: #e3e8f0;
+  --tinte: #2340b5;          /* Königsblau aus dem Füller */
+  --tinte-tief: #172f8e;
+  --tinte-hauch: #e8ecfb;
+  --marker: #ffe55c;         /* Textmarker */
+  --gruen: #1b7a3d;          /* grüner Korrekturstift */
+  --rot: #b3261e;
+  --hinweis: #694800;
+  --hinweis-grund: #fff2cc;
+  --blatt: #ffffff;          /* Übungsblatt bleibt auch auf der Tafel weiß: H5P zeichnet hell */
+  --blatt-tinte: #1d2230;
+  /* Helligkeit (OKLCH) der Fachfarben; Farbton und Buntheit kommen je Fach aus --fh und --fc */
+  --l-fach: 56%; --l-fach-tinte: 41%; --l-fach-hauch: 96.5%; --l-fach-stift: 89%;
+  --k-hauch: .28; --k-stift: .55;
+
   --schrift-text: "Atkinson Hyperlegible Next", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --schrift-titel: "Bricolage Grotesque", "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  --schrift-hand: "Playpen Sans", "Atkinson Hyperlegible Next", system-ui, sans-serif;
   --breite: 1240px;
   --rand: clamp(16px, 4vw, 40px);
-  /* Heftfarben je Übungsart */
-  --h-quiz: #2f5fd0;
-  --h-text: #d2463a;
-  --h-ziehen: #ee8a2e;
-  --h-karten: #f0c22e;
-  --h-bild: #2e9a5b;
-  --h-video: #8a4fc8;
-  --h-buch: #1e8c96;
-  --h-sonst: #8592a3;
-  color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --papier: #17221e; --flaeche: #1e2b26; --karo: rgba(233, 238, 234, .055); --tinte: #e9eeea;
-    --tinte-leise: #a9b8b0; --linie: #2f3e37; --blau: #9db6ff; --blau-tief: #c3d2ff; --blau-hauch: #233a52;
-    --hinweis: #f2cf7a; --hinweis-grund: #3a3220; --fehler: #ff8a80; --marker: rgba(255, 227, 110, .32);
-    --h-quiz: #4a73d6; --h-text: #cf5a4f; --h-ziehen: #e3893b; --h-karten: #e4bd3d; --h-bild: #3f9f67;
-    --h-video: #8d5fc4; --h-buch: #2f939c; --h-sonst: #7b8796;
-    color-scheme: dark;
+  :root {
+    --papier: #16211c;       /* Tafelgrün */
+    --flaeche: #1c2923;
+    --graphit: #eef2ee;      /* Kreide */
+    --graphit-leise: #b0bdb5;
+    --linie: #33443b;
+    --linie-stark: #7f9188;
+    --karo: rgba(238, 242, 238, .05);
+    --tinte: #a8c0ff;
+    --tinte-tief: #cbd8ff;
+    --tinte-hauch: #24364b;
+    --marker: rgba(255, 229, 92, .34);
+    --gruen: #86d9a1;
+    --rot: #ff9d92;
+    --hinweis: #f3d27c;
+    --hinweis-grund: #3a3220;
+    --l-fach: 72%; --l-fach-tinte: 87%; --l-fach-hauch: 25%; --l-fach-stift: 35%;
+    --k-hauch: .3; --k-stift: .45;
   }
 }
 
+/* Fachfarbe: jedes Element mit .fachfarbe bekommt --fh (Farbton) und --fc (Buntheit) per style-Attribut */
+.fachfarbe {
+  --fach: oklch(var(--l-fach) var(--fc, .03) var(--fh, 260));
+  --fach-tinte: oklch(var(--l-fach-tinte) calc(var(--fc, .03) * .85) var(--fh, 260));
+  --fach-hauch: oklch(var(--l-fach-hauch) calc(var(--fc, .03) * var(--k-hauch)) var(--fh, 260));
+  --fach-stift: oklch(var(--l-fach-stift) calc(var(--fc, .03) * var(--k-stift)) var(--fh, 260));
+}
+
+/* ------------------------------------------------------------------ Grundlagen */
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
-  margin: 0; background: var(--papier); color: var(--tinte);
+  margin: 0; background: var(--papier); color: var(--graphit);
   font: 400 1.0625rem/1.55 var(--schrift-text);
   -webkit-font-smoothing: antialiased; font-variant-numeric: lining-nums;
 }
-a { color: var(--blau); text-underline-offset: .18em; text-decoration-thickness: 1px; }
-a:hover { color: var(--blau-tief); text-decoration-thickness: 2px; }
-:focus-visible { outline: 3px solid var(--blau); outline-offset: 3px; border-radius: 4px; }
+a { color: var(--tinte); text-underline-offset: .2em; text-decoration-thickness: 1px; }
+a:hover { color: var(--tinte-tief); text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--tinte); outline-offset: 3px; border-radius: 4px; }
 [hidden] { display: none !important; }
-h1, h2, h3 { font-family: var(--schrift-titel); color: var(--tinte); text-wrap: balance; }
+h1, h2, h3 { text-wrap: balance; }
+h1 { font-family: var(--schrift-hand); font-weight: 600; letter-spacing: -.01em; color: var(--tinte); }
+h2, h3 { font-family: var(--schrift-text); font-weight: 750; letter-spacing: -.01em; }
+p { text-wrap: pretty; }
 img { max-width: 100%; }
+svg.symbol { width: 1.25em; height: 1.25em; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .skip {
-  position: absolute; left: 16px; top: -100px; z-index: 20; padding: 10px 16px; border-radius: 6px;
-  background: var(--blau); color: var(--papier); font-weight: 700; text-decoration: none;
+  position: absolute; left: 16px; top: -100px; z-index: 20; padding: 10px 16px; border-radius: 8px;
+  background: var(--tinte); color: var(--papier); font-weight: 700; text-decoration: none;
 }
 .skip:focus { top: 12px; color: var(--papier); }
-.innen { max-width: var(--breite); margin: 0 auto; padding-left: var(--rand); padding-right: var(--rand); }
+.innen { max-width: var(--breite); margin: 0 auto; padding-inline: var(--rand); }
+.schmal { max-width: calc(1040px + 2 * var(--rand)); }
+mark { background: var(--marker); color: inherit; border-radius: 2px; padding: 0 1px; }
 .karopapier {
-  background-color: var(--papier);
   background-image:
     linear-gradient(var(--karo) 1px, transparent 1px),
     linear-gradient(90deg, var(--karo) 1px, transparent 1px);
-  background-size: 20px 20px;
+  background-size: 22px 22px;
   background-position: -1px -1px;
 }
 
-/* Kopfzeile */
-.kopf { border-bottom: 1px solid var(--linie); background: var(--papier); }
-.kopf .innen { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; min-height: 64px; padding-top: 8px; padding-bottom: 8px; }
-.logo-umschlag { fill: var(--blau); } .logo-ruecken { fill: var(--blau-tief); } .logo-etikett { fill: var(--papier); }
-/* Über-Seite: Kopf und Fuß in voller Breite, Text schmal */
-.text-seite .kopf .innen { max-width: var(--breite); }
-.marke { display: inline-flex; align-items: center; gap: 10px; color: var(--tinte); text-decoration: none; }
-.marke:hover { color: var(--tinte); }
-.marke svg { flex: none; }
-.marke b { font: 750 1.2rem/1 var(--schrift-titel); letter-spacing: -.02em; }
-.hauptnavi { display: flex; gap: 4px; }
-.hauptnavi a {
-  padding: 8px 12px; border-radius: 6px; color: var(--tinte-leise); text-decoration: none; font-weight: 600; font-size: .95rem;
-}
-.hauptnavi a:hover { color: var(--tinte); background: var(--blau-hauch); }
-.hauptnavi a { white-space: nowrap; }
-@media (max-width: 480px) { .hauptnavi a:first-child { display: none; } }
-.hauptnavi a[aria-current="page"] { color: var(--tinte); box-shadow: inset 0 -3px 0 var(--blau); border-radius: 0; }
-
-/* Startseite: Kopfbereich auf Karopapier */
-.buehne-start { border-bottom: 1px solid var(--linie); }
-.buehne-start .innen { padding-top: 60px; padding-bottom: 56px; }
-.buehne-start h1 {
-  margin: 0; max-width: 15ch;
-  font-size: clamp(2.5rem, 1.4rem + 4.6vw, 4.75rem); line-height: 1; font-weight: 780; letter-spacing: -.035em;
-}
-.buehne-start .unterzeile { margin: 20px 0 0; max-width: 56ch; font-size: clamp(1.05rem, 1rem + .3vw, 1.2rem); color: var(--tinte-leise); }
-.suchzeile { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; max-width: 760px; }
-.suchfeld { position: relative; flex: 1 1 320px; }
-.suchfeld svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--tinte-leise); pointer-events: none; }
-.suchfeld input {
-  width: 100%; min-height: 56px; padding: 12px 16px 12px 50px;
-  font: 500 1.0625rem/1.2 var(--schrift-text); color: var(--tinte);
-  background: var(--flaeche); border: 2px solid var(--tinte); border-radius: 8px;
-  box-shadow: 4px 4px 0 var(--tinte);
-}
-.suchfeld input::placeholder { color: var(--tinte-leise); }
-.suchfeld input:focus-visible { outline: none; border-color: var(--blau); box-shadow: 4px 4px 0 var(--blau); }
+/* Knöpfe */
 .knopf {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px;
-  padding: 10px 18px; border-radius: 8px; border: 2px solid var(--tinte);
-  font: 650 1rem/1.1 var(--schrift-text); color: var(--tinte); background: var(--flaeche);
+  padding: 10px 18px; border-radius: 10px; border: 2px solid var(--graphit);
+  font: 700 1rem/1.15 var(--schrift-text); color: var(--graphit); background: var(--flaeche);
   text-decoration: none; cursor: pointer;
 }
-.knopf:hover { color: var(--tinte); background: var(--blau-hauch); }
-.knopf.haupt { background: var(--blau); border-color: var(--blau); color: var(--papier); }
-.knopf.haupt:hover { background: var(--blau-tief); border-color: var(--blau-tief); color: var(--papier); }
-.suchzeile .knopf { min-height: 56px; }
-
-/* Übungsarten-Leiste */
-.arten { margin: 36px 0 0; }
-.arten h2, .abschnitt-titel { font-size: 1.15rem; font-weight: 700; margin: 0 0 12px; letter-spacing: -.01em; }
-.arten ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-.art {
-  display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 6px 12px 6px 8px;
-  border: 1px solid var(--linie); border-radius: 6px; background: var(--flaeche);
-  font: 600 .95rem/1.2 var(--schrift-text); color: var(--tinte); cursor: pointer;
-}
-.art:hover { border-color: var(--tinte-leise); }
-.art .farbe { width: 14px; height: 18px; border-radius: 2px 4px 4px 2px; background: var(--heft); box-shadow: inset 3px 0 0 rgba(0, 0, 0, .18); }
-.art .zahl { color: var(--tinte-leise); font-weight: 500; font-variant-numeric: tabular-nums; }
-.art { white-space: nowrap; }
-.arten .unterarten { margin-top: 12px; padding-left: 12px; border-left: 3px solid var(--linie); }
-.unterarten .art { min-height: 34px; padding: 4px 10px; font-size: .9rem; font-weight: 500; background: transparent; }
-.art[aria-pressed="true"] { border-color: var(--tinte); background: var(--tinte); color: var(--papier); }
-.art[aria-pressed="true"] .zahl { color: inherit; opacity: .75; }
-@media (max-width: 640px) {
-  /* Auf dem Handy waagerecht wischen; rechts ausblenden als Hinweis, dass es weitergeht (ohne negativen Rand: WCAG 1.4.10) */
-  .arten ul { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px;
-    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); }
-  .arten ul::-webkit-scrollbar { display: none; }
-  .art { flex: none; }
-}
-
-/* Fächer als Inhaltsverzeichnis: Punktlinie bis zur Anzahl, gewähltes Fach mit Textmarker */
-.faecher { margin: 40px 0 0; }
-.faecher > h2 { font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); font-weight: 760; letter-spacing: -.025em; margin: 0 0 18px; }
-.faecher-gruppen { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 28px 40px; }
-@media (max-width: 640px) { .faecher-gruppen { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 20px; } .fach { font-size: .95rem; } }
-.faecher-gruppen h3 { -webkit-hyphens: auto; hyphens: auto; overflow-wrap: anywhere; margin: 0 0 6px; padding-bottom: 6px; border-bottom: 2px solid var(--tinte); font-size: 1rem; font-weight: 700; }
-.faecher-gruppen ul { list-style: none; margin: 0; padding: 0; }
-.fach {
-  display: flex; align-items: baseline; width: 100%; padding: 5px 0; border: 0; background: none; cursor: pointer;
-  font: 500 1rem/1.35 var(--schrift-text); color: var(--tinte); text-align: left;
-}
-.fach .name { min-width: 0; padding: 0 2px; border-radius: 2px; -webkit-hyphens: auto; hyphens: auto; overflow-wrap: anywhere; }
-.fach .zahl { flex: none; }
-.fach .punkte { flex: 1; min-width: 12px; margin: 0 6px; border-bottom: 2px dotted var(--linie); transform: translateY(-4px); }
-.fach .zahl { color: var(--tinte-leise); font-variant-numeric: tabular-nums; font-size: .95rem; }
-.fach:hover .name { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .18em; }
-.fach[aria-pressed="true"] .name { background: linear-gradient(104deg, transparent .2em, var(--marker) .3em, var(--marker) calc(100% - .3em), transparent calc(100% - .2em)); font-weight: 700; }
-.fach[aria-pressed="true"] .zahl { color: var(--tinte); font-weight: 700; }
-.arten-zeile { margin-top: 36px; }
-.arten-zeile > h2 { font-size: 1.1rem; font-weight: 700; margin: 0 0 12px; }
-
-/* Werkzeugzeile über der Liste */
-.werkzeuge { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; margin: 32px 0 20px; }
-.treffer { margin: 0; font: 700 1.15rem/1.3 var(--schrift-titel); }
-.auswahl { display: flex; flex-wrap: wrap; gap: 12px; }
-.auswahl label { display: flex; align-items: center; gap: 8px; color: var(--tinte-leise); font-size: .95rem; }
-.auswahl select {
-  min-height: 40px; padding: 6px 10px; font: 600 .95rem var(--schrift-text); color: var(--tinte);
-  background: var(--flaeche); border: 1px solid var(--linie); border-radius: 6px; max-width: 60vw;
-}
+.knopf:hover { color: var(--graphit); background: var(--tinte-hauch); }
+.knopf.haupt { background: var(--tinte); border-color: var(--tinte); color: var(--papier); }
+.knopf.haupt:hover { background: var(--tinte-tief); border-color: var(--tinte-tief); color: var(--papier); }
+.knopf.leise { border-width: 1px; border-color: var(--linie-stark); font-weight: 650; min-height: 44px; padding: 8px 14px; }
+.knopf.leise:hover { border-color: var(--graphit); }
 .knopf-link {
-  font: 600 .95rem var(--schrift-text); color: var(--blau); background: none; border: 0; padding: 0;
-  text-decoration: underline; text-underline-offset: .18em; cursor: pointer;
+  font: 650 1rem var(--schrift-text); color: var(--tinte); background: none; border: 0; padding: 4px 0;
+  text-decoration: underline; text-underline-offset: .2em; cursor: pointer;
 }
 
-/* Hefte (Übungskarten) */
+/* ------------------------------------------------------------------ Kopfzeile */
+.kopf { background: var(--flaeche); border-bottom: 1px solid var(--linie); }
+.kopf-innen { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 28px; min-height: 72px; padding-block: 10px; }
+.marke { display: inline-flex; align-items: center; gap: 10px; color: var(--tinte); text-decoration: none; }
+.marke:hover { color: var(--tinte); }
+.marke span { font: 650 1.5rem/1 var(--schrift-hand); letter-spacing: -.01em; }
+.marke svg { flex: none; }
+.logo-umschlag { fill: var(--tinte); } .logo-ruecken { fill: var(--tinte-tief); } .logo-etikett { fill: var(--flaeche); }
+.kopf-suche { flex: 1 1 260px; max-width: 520px; }
+.kopf-suche form { position: relative; margin: 0; }
+.kopf-suche svg { position: absolute; left: 14px; top: 50%; translate: 0 -50%; color: var(--graphit-leise); pointer-events: none; }
+.kopf-suche input {
+  width: 100%; min-height: 48px; padding: 10px 14px 10px 46px;
+  font: 500 1.0625rem/1.2 var(--schrift-text); color: var(--graphit);
+  background: var(--papier); border: 2px solid var(--linie-stark); border-radius: 10px;
+}
+.kopf-suche input::placeholder { color: var(--graphit-leise); }
+.kopf-suche input:hover { border-color: var(--graphit); }
+.kopf-suche input:focus-visible { outline: 3px solid var(--tinte); outline-offset: 1px; border-color: var(--tinte); background: var(--flaeche); }
+.kopf-navi { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.kopf-navi a {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 12px; border-radius: 8px;
+  color: var(--graphit); text-decoration: none; font-weight: 650; white-space: nowrap;
+}
+.kopf-navi a:hover { background: var(--tinte-hauch); color: var(--graphit); }
+.kopf-navi a[aria-current="page"] { box-shadow: inset 0 -3px 0 var(--tinte); border-radius: 8px 8px 0 0; }
+.kopf-navi svg { color: var(--tinte); }
+.kopf-navi .kurz { display: none; }
+@media (max-width: 700px) {
+  .kopf-innen { column-gap: 12px; }
+  .marke span { font-size: 1.35rem; }
+  .kopf-navi a { padding-inline: 10px; }
+  .kopf-suche { order: 3; flex-basis: 100%; max-width: none; }
+  .kopf-navi .lang { display: none; }
+  .kopf-navi .kurz { display: inline; }
+}
+
+/* ------------------------------------------------------------------ Startseite */
+.begruessung { padding-top: clamp(28px, 5vw, 56px); padding-bottom: 28px; }
+.begruessung h1 { margin: 0; font-size: clamp(2.4rem, 1.4rem + 4vw, 4.4rem); line-height: 1.05; font-weight: 600; }
+.begruessung p { margin: 14px 0 0; max-width: 58ch; font-size: clamp(1.05rem, 1rem + .3vw, 1.2rem); color: var(--graphit-leise); }
+
+/* Stundenplan: gedrucktes Raster, Fächer von Hand eingetragen und mit Buntstift ausgemalt */
+.stundenplan {
+  list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  background: var(--flaeche); border: 2px solid var(--graphit); border-radius: 14px; overflow: hidden;
+}
+.stundenplan li { box-shadow: 1px 0 0 var(--linie), 0 1px 0 var(--linie); }
+@media (max-width: 900px) { .stundenplan { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 520px) {
+  .stundenplan { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* schmale Zellen: Anzahl neben das Kürzel, der Fachname bekommt die ganze Breite */
+  .stundenplan:not(.klein) .stunde { grid-template: "kuerzel zahl" 1fr "name name" auto / minmax(0, 1fr) auto; padding: 14px 14px 12px; }
+  .stundenplan:not(.klein) .zahl { align-self: start; }
+  .stundenplan:not(.klein) .name { font-size: .975rem; }
+}
+.stunde {
+  position: relative; isolation: isolate; height: 100%;
+  display: grid; grid-template: "kuerzel kuerzel" 1fr "name zahl" auto / minmax(0, 1fr) auto; gap: 6px 10px;
+  min-height: clamp(116px, 9vw + 40px, 150px); padding: 16px 18px 14px;
+  color: var(--graphit); text-decoration: none;
+}
+.stunde::before {
+  content: ""; position: absolute; inset: 7px; z-index: -1;
+  border-radius: 9px 14px 8px 12px / 12px 8px 14px 9px;
+  background: repeating-linear-gradient(-58deg, var(--fach-stift) 0 1.6px, transparent 1.6px 5.5px);
+}
+.stunde:hover { color: var(--graphit); }
+.stunde:hover::before { background: repeating-linear-gradient(-58deg, var(--fach-stift) 0 2.6px, transparent 2.6px 4.6px); }
+.stunde:focus-visible { outline-offset: -5px; border-radius: 12px; }
+.stunde .kuerzel { grid-area: kuerzel; font: 600 clamp(2.1rem, 1.6rem + 1.6vw, 2.9rem)/1 var(--schrift-hand); color: var(--fach-tinte); }
+.stunde .name { grid-area: name; align-self: end; font-weight: 700; line-height: 1.25; -webkit-hyphens: auto; hyphens: auto; overflow-wrap: break-word; }
+.stunde .zahl { grid-area: zahl; align-self: end; font-variant-numeric: tabular-nums; font-weight: 600; }
+.plan-weitere { margin: 40px 0 14px; font-size: 1.15rem; }
+/* weitere Fächer: eingetragen, aber noch nicht ausgemalt – das passiert erst unter dem Zeiger */
+.stundenplan.klein { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 900px) { .stundenplan.klein { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .stundenplan.klein { grid-template-columns: minmax(0, 1fr); } }
+.stundenplan.klein .stunde { grid-template: "kuerzel name zahl" auto / 3rem minmax(0, 1fr) auto; column-gap: 8px; align-items: baseline; min-height: 60px; padding: 14px 16px; }
+.stundenplan.klein .kuerzel { font-size: 1.4rem; }
+.stundenplan.klein .name { align-self: baseline; font-weight: 600; font-size: .975rem; }
+.stundenplan.klein .zahl { align-self: baseline; font-weight: 500; color: var(--graphit-leise); }
+.stundenplan.klein .stunde::before { inset: 5px; background: none; }
+.stundenplan.klein .stunde:hover::before { background: repeating-linear-gradient(-58deg, var(--fach-stift) 0 1.6px, transparent 1.6px 5.5px); }
+
+.abschnitt { margin-top: 56px; }
+.abschnitt-kopf { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 20px; margin-bottom: 18px; }
+.abschnitt-kopf h2, .abschnitt > h2 { margin: 0 0 18px; font-size: clamp(1.35rem, 1.2rem + .6vw, 1.65rem); }
+.abschnitt-kopf h2 { margin: 0; }
+
+/* Übungsarten als Kacheln mit Symbol */
+.arten-kacheln { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 10px; }
+.arten-kacheln a {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; min-height: 60px; padding: 10px 16px;
+  border: 1px solid var(--linie-stark); border-radius: 12px; background: var(--flaeche);
+  color: var(--graphit); text-decoration: none; font-weight: 650;
+}
+.arten-kacheln a:hover { border-color: var(--graphit); background: var(--tinte-hauch); color: var(--graphit); }
+.arten-kacheln svg { width: 28px; height: 28px; color: var(--tinte); }
+.arten-kacheln .zahl { color: var(--graphit-leise); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------------ Liste (Fach, Übungsart, Suche) */
+.listen-kopf { border-bottom: 1px solid var(--linie); background-color: var(--papier); }
+.listen-kopf.fachfarbe { background-color: var(--fach-hauch); }
+.listen-kopf .innen { padding-top: 22px; padding-bottom: 30px; }
+.zurueck { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; font-weight: 650; }
+.listen-titel { display: flex; align-items: center; gap: 12px 22px; margin-top: 10px; }
+.listen-titel h1 { margin: 0; font-size: clamp(2.1rem, 1.4rem + 2.8vw, 3.5rem); line-height: 1.05; overflow-wrap: anywhere; }
+.fachfarbe .listen-titel h1 { color: var(--fach-tinte); }
+.listen-titel p { margin: 6px 0 0; color: var(--graphit-leise); }
+.kuerzel-gross {
+  flex: none; display: grid; place-items: center; width: clamp(76px, 60px + 3vw, 104px); aspect-ratio: 1;
+  font: 600 clamp(2rem, 1.5rem + 1.8vw, 2.9rem)/1 var(--schrift-hand); color: var(--fach-tinte);
+  border: 2px solid var(--fach); border-radius: 14px 18px 12px 20px / 18px 12px 20px 14px;
+  background: var(--flaeche) repeating-linear-gradient(-58deg, var(--fach-stift) 0 2px, transparent 2px 6px);
+}
+.listen-aktionen { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 16px; }
+
+.filter { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 14px 24px; margin: 26px 0 0; }
+.filter ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 14px;
+  border: 1px solid var(--linie-stark); border-radius: 999px; background: var(--flaeche);
+  color: var(--graphit); text-decoration: none; font-weight: 650; font-size: .975rem; white-space: nowrap;
+}
+.chip:hover { border-color: var(--graphit); color: var(--graphit); }
+.chip svg { color: var(--tinte); }
+.chip .zahl { color: var(--graphit-leise); font-weight: 500; font-variant-numeric: tabular-nums; }
+.chip[aria-current="true"] { background: var(--graphit); border-color: var(--graphit); color: var(--papier); }
+.chip[aria-current="true"] svg, .chip[aria-current="true"] .zahl { color: inherit; }
+.unterarten { width: 100%; padding-left: 14px !important; border-left: 3px solid var(--linie); }
+.unterarten .chip { min-height: 38px; padding: 6px 12px; font-size: .925rem; font-weight: 550; }
+@media (max-width: 640px) {
+  /* auf dem Handy waagerecht wischen; rechts ausblenden als Hinweis, dass es weitergeht */
+  .filter ul { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; width: 100%;
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); }
+  .filter ul::-webkit-scrollbar { display: none; }
+  .chip { flex: none; }
+}
+.sortierung { display: flex; align-items: center; gap: 8px; color: var(--graphit-leise); font-size: .975rem; }
+.sortierung select {
+  min-height: 44px; padding: 6px 10px; font: 650 .975rem var(--schrift-text); color: var(--graphit);
+  background: var(--flaeche); border: 1px solid var(--linie-stark); border-radius: 10px; max-width: 60vw;
+}
+@supports (appearance: base-select) {
+  .sortierung select, .sortierung ::picker(select) { appearance: base-select; }
+  .sortierung select { padding-inline: 12px; }
+  .sortierung ::picker(select) { border: 1px solid var(--linie-stark); border-radius: 10px; background: var(--flaeche); padding: 4px; box-shadow: 0 12px 28px -12px rgba(0, 0, 0, .35); }
+  .sortierung option { padding: 8px 12px; border-radius: 6px; }
+  .sortierung option:hover, .sortierung option:focus-visible { background: var(--tinte-hauch); }
+  .sortierung option::checkmark { color: var(--tinte); }
+}
+.treffer { margin: 28px 0 18px; font-weight: 650; color: var(--graphit-leise); }
+
+/* ------------------------------------------------------------------ Übungskarten (Hefte) */
 .hefte {
   list-style: none; margin: 0; padding: 0;
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 36px 24px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 236px), 1fr)); gap: 40px 28px;
 }
-.heft { position: relative; display: flex; flex-direction: column; min-width: 0; }
-.heft, .art, .art-marke { --heft: var(--h-sonst); }
-
+.heft { position: relative; display: flex; flex-direction: column; min-width: 0; border-radius: 6px; }
+.heft:has(.heft-link:focus-visible) { outline: 3px solid var(--tinte); outline-offset: 6px; }
+.heft-link { color: inherit; text-decoration: none; }
+.heft-link:focus-visible { outline: none; }
+.heft-link::after { content: ""; position: absolute; inset: 0; }  /* ganze Karte klickbar, Linktext bleibt der Titel */
 .umschlag {
-  position: relative; aspect-ratio: 4 / 3; overflow: hidden;
-  border-radius: 3px 10px 10px 3px; background: var(--heft);
-  /* Heftrücken links und ein Hauch Karton */
-  background-image:
-    linear-gradient(90deg, rgba(0, 0, 0, .22) 0, rgba(0, 0, 0, .08) 7px, rgba(255, 255, 255, .08) 9px, transparent 16px),
-    radial-gradient(120% 90% at 100% 0, rgba(255, 255, 255, .16), transparent 60%);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, .08), 0 10px 18px -14px rgba(20, 30, 50, .55);
-  transition: transform .18s ease, box-shadow .18s ease;
+  position: relative; aspect-ratio: 16 / 10; overflow: hidden; margin-bottom: 14px;
+  border-radius: 3px 12px 12px 3px; border-left: 10px solid var(--fach); background-color: var(--fach-hauch);
 }
-.umschlag img {
-  position: absolute; inset: 12px 12px 12px 22px; width: calc(100% - 34px); height: calc(100% - 24px);
-  object-fit: cover; border-radius: 3px; background: #fff;
-}
-.etikett {
-  position: absolute; left: 26%; right: 12%; top: 34%;
-  padding: 10px 12px 18px; border-radius: 4px; background: var(--etikett); color: var(--etikett-tinte);
-  font: 700 .95rem/1.2 var(--schrift-titel); letter-spacing: -.01em; text-align: center;
-  background-image: linear-gradient(transparent calc(100% - 9px), #c9d3e0 calc(100% - 9px), #c9d3e0 calc(100% - 8px), transparent calc(100% - 8px));
-  box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
-}
-.umschlag.mit-bild .etikett {
-  left: 22px; right: auto; top: auto; bottom: 20px; max-width: calc(100% - 46px);
-  padding: 5px 9px; font-size: .8rem; background-image: none; text-align: left;
-}
-.heft a.heft-link { color: inherit; text-decoration: none; display: flex; flex-direction: column; gap: 12px; }
-.heft a.heft-link:hover .umschlag { transform: translateY(-3px) rotate(-.6deg); box-shadow: 0 1px 0 rgba(0, 0, 0, .08), 0 16px 22px -14px rgba(20, 30, 50, .6); }
-.heft a.heft-link:focus-visible { outline: none; }
-.heft a.heft-link:focus-visible .umschlag { outline: 3px solid var(--blau); outline-offset: 3px; }
-.heft-titel { margin: 0; font-size: 1.1rem; line-height: 1.25; font-weight: 680; letter-spacing: -.012em; overflow-wrap: anywhere; }
-.heft a.heft-link:hover .heft-titel { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .18em; }
+.umschlag.kariert { background-image: linear-gradient(var(--fach-stift) 1px, transparent 1px), linear-gradient(90deg, var(--fach-stift) 1px, transparent 1px); background-size: 18px 18px; background-position: -1px -1px; }
+.umschlag.liniert { background-image: linear-gradient(transparent 21px, var(--fach-stift) 21px 22px); background-size: 100% 22px; }
+.umschlag img { display: block; width: 100%; height: 100%; object-fit: cover; background: #fff; }
+.umschlag .symbol { position: absolute; inset: 0; margin: auto; width: 26%; height: 40%; color: var(--fach-tinte); stroke-width: 1.4; }
+.heft:hover .umschlag { border-left-color: var(--fach-tinte); }
+.heft-titel { margin: 0; font: 700 1.125rem/1.3 var(--schrift-text); letter-spacing: -.005em; overflow-wrap: anywhere; }
+.heft:hover .heft-titel { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .2em; }
 .heft-anriss {
-  margin: 6px 0 0; color: var(--tinte-leise); font-size: .95rem; line-height: 1.45;
-  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  margin: 6px 0 0; color: var(--graphit-leise); font-size: .95rem; line-height: 1.45;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
-.heft-faecher { margin: 8px 0 0; font-size: .85rem; font-weight: 600; color: var(--tinte-leise); }
-.heft-markierung { margin: 8px 0 0; font-size: .85rem; color: var(--hinweis); }
+.heft-meta { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 10px 0 0; padding: 0; list-style: none; font-size: .9rem; color: var(--graphit-leise); }
+.heft-meta li { display: inline-flex; align-items: center; gap: 6px; }
+.heft-meta .symbol { width: 1.1em; height: 1.1em; }
+.heft-meta .punkt { width: .7em; height: .7em; border-radius: 2px; background: var(--fach); }
+.heft-markierung { margin: 8px 0 0; font-size: .875rem; color: var(--hinweis); }
+@media (max-width: 520px) {
+  /* Handy: Umschlag klein links, Text rechts – so passen mehrere Übungen auf einen Bildschirm */
+  .hefte { gap: 22px; }
+  .heft { display: grid; grid-template-columns: 92px minmax(0, 1fr); column-gap: 14px; align-content: start; }
+  .heft > * { grid-column: 2; }
+  .heft > .umschlag { grid-column: 1; grid-row: 1 / span 4; align-self: start; aspect-ratio: 4 / 5; margin: 0; border-left-width: 7px; }
+  .umschlag .symbol { width: 50%; height: 50%; }
+  .heft-titel { font-size: 1.05rem; }
+}
 
 .leer { padding: 56px 0; text-align: center; }
 .leer h2 { margin: 0 0 8px; font-size: 1.4rem; }
-.leer p { margin: 0 0 16px; color: var(--tinte-leise); }
+.leer p { margin: 0 0 18px; color: var(--graphit-leise); }
 
-/* Seiten */
-.seiten { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 48px 0 0; padding: 0; list-style: none; }
+/* Seitenzahlen */
+.seiten { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 52px 0 0; padding: 0; list-style: none; }
 .seiten a, .seiten span {
-  display: inline-grid; place-items: center; min-width: 44px; min-height: 44px; padding: 0 12px; border-radius: 6px;
-  border: 1px solid var(--linie); background: var(--flaeche); color: var(--tinte); text-decoration: none;
-  font-weight: 600; font-variant-numeric: tabular-nums;
+  display: inline-grid; place-items: center; min-width: 44px; min-height: 44px; padding: 0 12px; border-radius: 10px;
+  border: 1px solid var(--linie); background: var(--flaeche); color: var(--graphit); text-decoration: none;
+  font-weight: 650; font-variant-numeric: tabular-nums;
 }
-.seiten a:hover { border-color: var(--tinte); color: var(--tinte); }
-.seiten [aria-current="page"] { background: var(--tinte); border-color: var(--tinte); color: var(--papier); }
+.seiten a:hover { border-color: var(--graphit); color: var(--graphit); }
+.seiten [aria-current="page"] { background: var(--graphit); border-color: var(--graphit); color: var(--papier); }
 .seiten .luecke { border: 0; background: none; min-width: 20px; }
 
-/* Fußzeile */
-.fuss { margin-top: 80px; border-top: 1px solid var(--linie); padding: 28px 0 48px; color: var(--tinte-leise); font-size: .95rem; }
-.fuss .innen { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; }
-.fuss p { margin: 0; max-width: 64ch; }
-.fuss a { display: inline-block; padding: 3px 0; }
-
-/* Übungsseite */
-.pfad { margin: 28px 0 0; font-size: .95rem; }
-.pfad ol { list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0; padding: 0; color: var(--tinte-leise); }
-.pfad a { display: inline-block; padding: 3px 0; }  /* Zielgröße ≥ 24 px (WCAG 2.5.8) */
-.pfad li + li::before { content: "/"; margin-right: 8px; color: var(--linie); }
-.uebung-kopf { margin: 14px 0 24px; }
-.uebung-kopf h1 { margin: 0; font-size: clamp(1.9rem, 1.3rem + 2.2vw, 3rem); line-height: 1.05; font-weight: 760; letter-spacing: -.03em; max-width: 26ch; overflow-wrap: anywhere; }
-.merkmale { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin: 14px 0 0; padding: 0; list-style: none; color: var(--tinte-leise); }
-.merkmale .art-marke { display: inline-flex; align-items: center; gap: 8px; color: var(--tinte); font-weight: 650; }
-.merkmale .art-marke .farbe { width: 14px; height: 18px; border-radius: 2px 4px 4px 2px; background: var(--heft); box-shadow: inset 3px 0 0 rgba(0, 0, 0, .18); }
-/* Platz für die Übung reservieren, damit beim Laden nichts springt (CLS) */
-.blatt { min-height: min(60vh, 560px);
-  max-width: 1000px; background: #fff; color: #1e2a3a; border: 1px solid var(--linie); border-radius: 6px;
-  padding: clamp(6px, 1.5vw, 16px); box-shadow: 0 18px 30px -26px rgba(20, 30, 50, .5);
+/* ------------------------------------------------------------------ Übungsseite (Fokus) */
+.uebung-kopf { background-color: var(--fach-hauch); border-bottom: 1px solid var(--linie); }
+.uebung-kopf .innen { padding-top: 18px; padding-bottom: 54px; }
+.fach-link { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; font-weight: 700; color: var(--fach-tinte); text-decoration: none; }
+.fach-link:hover { color: var(--fach-tinte); text-decoration: underline; text-decoration-thickness: 2px; }
+.fach-link .kuerzel {
+  display: inline-grid; place-items: center; min-width: 40px; height: 40px; padding: 0 6px;
+  font: 600 1.15rem/1 var(--schrift-hand); border: 2px solid var(--fach); border-radius: 8px 11px 7px 10px;
+  background: var(--flaeche) repeating-linear-gradient(-58deg, var(--fach-stift) 0 1.5px, transparent 1.5px 4.5px);
 }
-.blatt-leiste { max-width: 1000px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin: 16px 0 0; }
-.blatt-leiste .links, .blatt-leiste .rechts { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-.blatt-leiste .knopf { min-height: 44px; padding: 8px 14px; font-size: .95rem; border-width: 1px; border-color: var(--linie); }
-.blatt-leiste .knopf:hover { border-color: var(--tinte); }
-.blatt-leiste .klein { font-size: .9rem; color: var(--tinte-leise); }
-.hinweis { max-width: 1000px; margin: 0 0 16px; padding: 12px 16px; border-radius: 6px; background: var(--hinweis-grund); color: var(--hinweis); }
-.hinweis.fehler { background: transparent; color: var(--fehler); border: 1px solid currentColor; }
-.blaettern { max-width: 1000px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 48px 0 0; }
+.uebung-kopf h1 { margin: 12px 0 0; font-size: clamp(1.9rem, 1.3rem + 2.2vw, 3rem); line-height: 1.1; color: var(--fach-tinte); max-width: 30ch; overflow-wrap: anywhere; }
+.merkmale { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 22px; margin: 14px 0 0; padding: 0; list-style: none; color: var(--graphit-leise); }
+.merkmale li { display: inline-flex; align-items: center; gap: 8px; }
+.merkmale .art { color: var(--graphit); font-weight: 650; }
+.merkmale svg { color: var(--fach-tinte); }
+
+.buehne { padding-bottom: 8px; }
+.blatt {
+  position: relative; margin-top: -32px; min-height: min(60vh, 560px);  /* Platz für die Übung, damit beim Laden nichts springt */
+  background: var(--blatt); color: var(--blatt-tinte); border: 1px solid var(--linie); border-radius: 8px;
+  padding: clamp(6px, 1.5vw, 16px); box-shadow: 0 1px 0 rgba(0, 0, 0, .04), 0 24px 40px -28px rgba(20, 30, 50, .45);
+}
+.blatt:focus-visible { outline-offset: 4px; }
+[data-h5p-geladen] .blatt { min-height: 0; }
+.hinweis { margin: 16px 0; padding: 12px 16px; border-radius: 10px; background: var(--hinweis-grund); color: var(--hinweis); }
+.hinweis.fehler { background: transparent; color: var(--rot); border: 1px solid currentColor; }
+#hinweise:not(:empty) + .blatt { margin-top: 0; }
+#hinweise:not(:empty) { margin-top: -32px; position: relative; }
+
+/* Ergebnis: erscheint, sobald die Übung ihr Ergebnis meldet (nichts wird gespeichert) */
+.ergebnis {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 18px; padding: 16px 20px;
+  border: 2px solid var(--gruen); border-radius: 14px; background: var(--flaeche);
+  transition: opacity .35s ease, translate .35s ease;
+}
+@starting-style { .ergebnis { opacity: 0; translate: 0 10px; } }
+.ergebnis svg { width: 52px; height: 44px; flex: none; fill: none; stroke: var(--gruen); stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+.ergebnis path { stroke-dasharray: 70; stroke-dashoffset: 0; animation: haken .55s .15s ease-out backwards; }
+@keyframes haken { from { stroke-dashoffset: 70; } }
+.ergebnis-text { display: flex; flex-direction: column; }
+.ergebnis-text b { font: 600 1.6rem/1.15 var(--schrift-hand); color: var(--gruen); }
+.ergebnis-text span { color: var(--graphit-leise); }
+.ergebnis .knopf { margin-left: auto; }
+.ergebnis.teilweise { border-color: var(--tinte); }
+.ergebnis.teilweise .ergebnis-text b { color: var(--tinte); }
+
+.blatt-leiste { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: start; gap: 12px; margin-top: 18px; }
+.blatt-leiste .links { display: flex; flex-wrap: wrap; gap: 10px; flex: 1 1 auto; }
+.blatt-leiste .knopf svg { color: var(--tinte); }
+.lehrkraefte { max-width: 100%; }
+.lehrkraefte summary {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 4px; cursor: pointer;
+  font-weight: 650; color: var(--tinte); list-style: none;
+}
+.lehrkraefte summary::-webkit-details-marker { display: none; }
+.lehrkraefte summary::after { content: ""; width: 8px; height: 8px; margin-left: 2px; border: solid currentColor; border-width: 0 2px 2px 0; rotate: 45deg; translate: 0 -2px; transition: rotate .2s; }
+.lehrkraefte[open] summary::after { rotate: -135deg; translate: 0 2px; }
+.lehrkraefte-inhalt { max-width: 46ch; margin: 8px 0 0; padding: 14px 16px; border: 1px solid var(--linie); border-radius: 10px; background: var(--flaeche); }
+.lehrkraefte-inhalt p { margin: 0 0 12px; font-size: .95rem; color: var(--graphit-leise); }
+.lehrkraefte-inhalt p:last-child { margin-bottom: 0; }
+@media (min-width: 700px) { .lehrkraefte { text-align: right; } .lehrkraefte-inhalt { text-align: left; } }
+
+.blaettern { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 48px 0 0; }
 .blaettern a {
   display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; min-height: 84px;
-  border: 1px solid var(--linie); border-radius: 8px; background: var(--flaeche); color: var(--tinte); text-decoration: none;
+  border: 1px solid var(--linie-stark); border-radius: 12px; background: var(--flaeche); color: var(--graphit); text-decoration: none;
 }
-.blaettern a:hover { border-color: var(--tinte); color: var(--tinte); }
-.blaettern span { color: var(--tinte-leise); font-size: .9rem; }
-.blaettern b { font: 680 1.05rem/1.3 var(--schrift-titel); overflow-wrap: anywhere; }
+.blaettern a:hover { border-color: var(--graphit); color: var(--graphit); }
+.blaettern span { color: var(--graphit-leise); font-size: .925rem; }
+.blaettern b { font-size: 1.05rem; line-height: 1.3; overflow-wrap: anywhere; }
 .blaettern .weiter { text-align: right; grid-column: 2; }
 @media (max-width: 560px) { .blaettern { grid-template-columns: 1fr; } .blaettern .weiter { grid-column: auto; } }
 .verwandt { margin-top: 64px; }
-.verwandt h2 { font-size: 1.5rem; margin: 0 0 20px; letter-spacing: -.02em; }
-.verwandt .hefte { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+.verwandt h2 { font-size: 1.5rem; margin: 0 0 22px; }
+.verwandt .hefte { grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); }
 .meldung {
-  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 30;
-  padding: 10px 16px; border-radius: 8px; background: var(--tinte); color: var(--papier); font-weight: 600;
+  position: fixed; left: 50%; bottom: 24px; translate: -50% 0; z-index: 30;
+  padding: 10px 16px; border-radius: 10px; background: var(--graphit); color: var(--papier); font-weight: 650;
+  transition: opacity .2s, translate .2s;
 }
+@starting-style { .meldung { opacity: 0; translate: -50% 8px; } }
 
-/* Über-Seite */
-.text-seite .innen { max-width: 860px; }
-.text-seite h1 { margin: 48px 0 16px; font-size: clamp(2rem, 1.4rem + 2.4vw, 3.2rem); line-height: 1.05; font-weight: 760; letter-spacing: -.03em; }
-.text-seite h2 { margin: 48px 0 12px; font-size: 1.45rem; letter-spacing: -.02em; }
+/* Zustimmung für Videos von YouTube & Co. */
+.zustimmung { display: grid; gap: 14px; justify-items: start; max-width: 60ch; margin: 24px auto; padding: 20px; color: var(--blatt-tinte); }
+.zustimmung p { margin: 0; }
+.zustimmung .knopf.haupt { background: #2340b5; border-color: #2340b5; color: #fff; }
+
+/* ------------------------------------------------------------------ Textseiten (Über, Impressum …) */
+.text-seite main.innen { max-width: calc(760px + 2 * var(--rand)); }
+.text-seite h1 { margin: 44px 0 16px; font-size: clamp(2.2rem, 1.5rem + 2.6vw, 3.4rem); line-height: 1.05; }
+.text-seite h2 { margin: 44px 0 12px; font-size: 1.4rem; }
 .text-seite p, .text-seite li { max-width: 68ch; }
 /* lange deutsche Wörter (Datenschutzerklärung, Aufsichtsbehörde) auf schmalen Bildschirmen trennen */
 .text-seite h1, .text-seite h2, .text-seite p, .text-seite li { -webkit-hyphens: auto; hyphens: auto; overflow-wrap: break-word; }
-.text-seite .einleitung { font-size: 1.2rem; color: var(--tinte-leise); }
+.text-seite .einleitung { font-size: 1.2rem; color: var(--graphit-leise); }
+.text-seite li + li { margin-top: 6px; }
 .zahlen { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
 .zahlen th, .zahlen td { padding: 10px 0; border-bottom: 1px solid var(--linie); text-align: left; vertical-align: top; }
-.zahlen th { font-weight: 500; color: var(--tinte-leise); padding-right: 24px; }
+.zahlen th { font-weight: 500; color: var(--graphit-leise); padding-right: 24px; }
 .zahlen td { text-align: right; font-weight: 650; }
-.zahlen .art-marke { display: inline-flex; align-items: center; gap: 10px; color: var(--tinte); font-weight: 600; }
-.zahlen .farbe { width: 12px; height: 16px; border-radius: 2px 4px 4px 2px; background: var(--heft); }
+.zahlen a { display: inline-flex; align-items: center; gap: 10px; color: var(--graphit); font-weight: 600; }
+.zahlen svg { color: var(--tinte); }
+
+/* ------------------------------------------------------------------ Fußzeile */
+.fuss { margin-top: 88px; border-top: 1px solid var(--linie); padding: 28px 0 48px; color: var(--graphit-leise); font-size: .95rem; }
+.fuss .innen { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; }
+.fuss p { margin: 0; max-width: 64ch; }
+.fuss a { display: inline-block; padding: 3px 0; }
+.fuss-links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 20px; }
+.fuss-links:empty { display: none; }
+
+/* ------------------------------------------------------------------ Laden, Einbettung, Bewegung, Druck */
+/* Inhalt erst zeigen, wenn er gebaut ist (verhindert Springen beim Laden); ohne JavaScript bleibt er sichtbar */
+.js [data-laedt] { visibility: hidden; min-height: 100vh; }
 
 /* Einbettung in archivierte Artikel (spielen.html?einbettung=1): nur das Blatt */
 .einbettung body { background: transparent; }
-.einbettung .kopf, .einbettung .skip, .einbettung .pfad, .einbettung .uebung-kopf, .einbettung .blatt-leiste,
+.einbettung .kopf, .einbettung .skip, .einbettung .uebung-kopf, .einbettung .blatt-leiste, .einbettung .ergebnis,
 .einbettung .blaettern, .einbettung .verwandt, .einbettung .fuss { display: none !important; }
 .einbettung .innen { max-width: none; padding: 0; }
-.einbettung .blatt { border: 0; border-radius: 0; box-shadow: none; padding: 0; max-width: none; min-height: 0; }
+.einbettung .blatt { margin: 0; border: 0; border-radius: 0; box-shadow: none; padding: 0; min-height: 0; }
 
+/* Seitenwechsel als Übergang: Kopfzeile bleibt stehen, der Umschlag einer Karte wird zum Übungsblatt */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  .kopf { view-transition-name: kopf; }
+  .uebungsseite .blatt { view-transition-name: blatt; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .18s; }
+  ::view-transition-group(blatt) { animation-duration: .32s; animation-timing-function: cubic-bezier(.2, .7, .2, 1); }
+}
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; }
-  .heft a.heft-link:hover .umschlag { transform: none; }
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
 @media print {
-  .kopf, .suchzeile, .arten, .werkzeuge, .seiten, .skip, .blatt-leiste, .blaettern, .verwandt { display: none; }
+  .kopf, .skip, .filter, .seiten, .blatt-leiste, .blaettern, .verwandt, .ergebnis, .listen-aktionen { display: none; }
   .karopapier { background: none; }
+  .blatt { box-shadow: none; margin-top: 0; }
 }
-
-/* Startseite: Liste erst zeigen, wenn sie gebaut ist (verhindert Springen beim Laden); ohne JavaScript bleibt sie sichtbar */
-.js [data-laedt] { visibility: hidden; min-height: 100vh; }
-search.suchzeile { display: flex; }
-
-/* Zustimmung für Videos von YouTube & Co. */
-.zustimmung { display: grid; gap: 14px; justify-items: start; max-width: 60ch; margin: 24px auto; padding: 20px; color: #1e2a3a; }
-.zustimmung p { margin: 0; }
-
-/* Fußzeile: Links aus der Konfiguration (Über, Impressum, Datenschutz, Barrierefreiheit …) */
-.fuss-links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 20px; }
-.fuss-links:empty { display: none; }

@@ -6,11 +6,13 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="color-scheme" content="light dark">
 <title>Über das Archiv – {{name}}</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 32'%3E%3Crect width='26' height='32' rx='3' fill='%232346c8'/%3E%3Crect width='5' height='32' rx='2' fill='%231a35a0'/%3E%3Crect x='8' y='11' width='14' height='9' rx='1.5' fill='white'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 32'%3E%3Crect width='26' height='32' rx='3' fill='%232340b5'/%3E%3Crect width='5' height='32' rx='2' fill='%23172f8e'/%3E%3Crect x='8' y='11' width='14' height='9' rx='1.5' fill='white'/%3E%3C/svg%3E">
 <script src="kopf.js?v={{version}}"></script>
+<link rel="preload" href="schriften/playpen-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="h5p-archiv.css?v={{version}}">
 <script src="uebungen.js?v={{version}}" defer></script>
 <script src="seite.js?v={{version}}" defer></script>
+<script src="ueber.js?v={{version}}" defer></script>
 </head>
 <body class="text-seite">
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
@@ -30,7 +32,8 @@
   <table class="zahlen" id="arten"><tbody></tbody></table>
 
   <h2>Für Lehrkräfte</h2>
-  <p>Auf der Seite jeder Übung gibt es die Original-Datei zum Herunterladen (<code>.h5p</code>). Sie enthält die
+  <p>Auf der Seite jeder Übung steht unter „Für Lehrkräfte“ die Original-Datei zum Herunterladen (<code>.h5p</code>) und die
+    Adresse zum Einbetten. Die Datei enthält die
     komplette Übung mit allen Bildern und lässt sich in Moodle, ILIAS, WordPress oder der kostenlosen App
     <a href="https://app.lumi.education/">Lumi</a> importieren, anpassen und im eigenen Kurs verwenden.</p>
   <p>Alle Übungen mit Titel, Übungsart und Autor:innen stehen auch in einer Tabelle:
@@ -55,13 +58,13 @@
 
   <h2>Technik</h2>
   <p>Die Übungen laufen mit <a href="https://github.com/tunapanda/h5p-standalone">h5p-standalone</a> (MIT-Lizenz)
-    direkt im Browser. Schriften: Bricolage Grotesque und Atkinson Hyperlegible Next (SIL Open Font License),
-    vom eigenen Server geladen. Nur Übungen mit mathematischen Formeln laden zusätzlich MathJax von cdnjs.</p>
+    direkt im Browser. Schriften: Playpen Sans und Atkinson Hyperlegible Next (SIL Open Font License), wie
+    MathJax für Übungen mit Formeln vom eigenen Server geladen.</p>
+  <p>Die Seite setzt keine Cookies und speichert nichts im Browser. Wie viele Punkte jemand in einer Übung hat,
+    sieht nur, wer gerade übt; beim Neuladen ist es weg.</p>
   <p id="stand"></p>
 </main>
 
 {{fuss}}
-
-<script src="ueber.js?v={{version}}" defer></script>
 </body>
 </html>

@@ -1,12 +1,19 @@
 <header class="kopf">
-  <div class="innen">
+  <div class="innen kopf-innen">
     <a class="marke" href="./">
-      <svg class="logo" width="22" height="28" viewBox="0 0 26 32" aria-hidden="true"><rect class="logo-umschlag" width="26" height="32" rx="3"/><rect class="logo-ruecken" width="5" height="32" rx="2"/><rect class="logo-etikett" x="8" y="11" width="14" height="9" rx="1.5"/></svg>
-      <b>{{name}}</b>
+      <svg class="logo" width="24" height="30" viewBox="0 0 26 32" aria-hidden="true"><rect class="logo-umschlag" width="26" height="32" rx="3"/><rect class="logo-ruecken" width="5" height="32" rx="2"/><rect class="logo-etikett" x="8" y="11" width="14" height="9" rx="1.5"/></svg>
+      <span>{{name}}</span>
     </a>
-    <nav class="hauptnavi" aria-label="Hauptnavigation">
-      <a href="./" id="zur-liste">Übungen</a>
-      <a href="ueber.html">Über das Archiv</a>
+    <search class="kopf-suche">
+      <form action="./" method="get">
+        <label for="suche" class="sr-only">Übungen durchsuchen</label>
+        <svg class="symbol" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <input type="search" id="suche" name="q" placeholder="Thema, Begriff oder Titel" autocomplete="off" enterkeyhint="search">
+      </form>
+    </search>
+    <nav class="kopf-navi" aria-label="Hauptnavigation">
+      <a href="spielen.html?zufall=1" id="zufall-link"><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="8.5" cy="8.5" r=".6"/><circle cx="12" cy="12" r=".6"/><circle cx="15.5" cy="15.5" r=".6"/></svg><span class="lang">Zufällige Übung</span><span class="kurz">Zufall</span></a>
+      <a href="ueber.html"><span class="lang">Über das Archiv</span><span class="kurz">Über</span></a>
     </nav>
   </div>
 </header>

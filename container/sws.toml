@@ -19,12 +19,13 @@ source = "/{,*.html,uebungen.js,h5p.csv}"
 headers = { Cache-Control = "no-cache" }
 
 # Content-Security-Policy: Skripte nur vom eigenen Server; erlaubt sind zusätzlich der feste Einzeiler, den der
-# H5P-Player in seinen Rahmen schreibt (per Hash), und eval (TimelineJS u. a. H5P-Bibliotheken).
+# H5P-Player in seinen Rahmen schreibt (per Hash), eval (TimelineJS u. a. H5P-Bibliotheken) und die Vorlade-Regeln
+# in index.html und spielen.html (zweiter Hash; 'inline-speculation-rules' wirkt neben Hashes nicht).
 # Fremde Rahmen (YouTube, eingebettete Seiten) lädt die Übungsseite erst nach Zustimmung.
 [[advanced.headers]]
 source = "**"
 [advanced.headers.headers]
-Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-eval' 'sha256-8CniZYrnO46q7MvZ3m08Wom1HH/ZhyXmm29kBKTV1rk=' https://www.youtube.com https://s.ytimg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://i.ytimg.com; font-src 'self' data:; media-src 'self' blob:; frame-src 'self' https:; worker-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-eval' 'sha256-8CniZYrnO46q7MvZ3m08Wom1HH/ZhyXmm29kBKTV1rk=' 'sha256-uOQ4TgnzPuobVoy3JbYGSg6niKl7sRgA8QDtlZuYFzQ=' https://www.youtube.com https://s.ytimg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://i.ytimg.com; font-src 'self' data:; media-src 'self' blob:; frame-src 'self' https:; worker-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
 X-Content-Type-Options = "nosniff"
 Referrer-Policy = "strict-origin-when-cross-origin"
 Permissions-Policy = "geolocation=(), microphone=(self), camera=()"
