@@ -1,0 +1,41 @@
+# Bei jedem Push und Pull Request: Seite ohne Übungen bauen, mit dem echten Webserver (inkl. Content-Security-Policy)
+# ausliefern und im Browser prüfen. Die volle Abnahme mit Übungen läuft gegen eine Instanz: tests/abnahme.mjs.
+name: Prüfen
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  pruefen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Python kompilieren
+        run: python -m py_compile uebungsheft.py
+      - name: Seite aus leerem Bestand bauen
+        run: python -B uebungsheft.py --bestand /tmp/bestand seite
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Test-Werkzeuge installieren
+        working-directory: tests
+        run: npm install --no-audit --no-fund && npx playwright install --with-deps chromium
+      - name: HTML prüfen
+        working-directory: tests
+        run: npx html-validate --config .htmlvalidate.json /tmp/bestand/seite/*.html
+      - name: Webserver mit Content-Security-Policy starten
+        run: |
+          chmod -R a+rX /tmp/bestand
+          docker run -d --name web -p 8080:8080 -e SERVER_CONFIG_FILE=/etc/sws.toml \
+            -v "$PWD/container/sws.toml:/etc/sws.toml:ro" -v /tmp/bestand:/bestand:ro \
+            docker.io/joseluisq/static-web-server:2-alpine
+          for i in $(seq 1 30); do curl -sf http://localhost:8080/health && break; sleep 1; done
+      - name: Rauchtest im Browser (axe, CSP, 320 px)
+        working-directory: tests
+        env:
+          BASE: http://localhost:8080/
+        run: node rauch.mjs

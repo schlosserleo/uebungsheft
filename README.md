@@ -78,6 +78,18 @@ Ausgeliefert wird nur `bestand/seite/` – mit jedem Webserver. Wichtig sind die
   ausdrücklicher Zustimmung geladen. Strenge Content-Security-Policy.
 - **Einbettung:** `spielen.html?id=<ID>&einbettung=1` zeigt nur die Übung (z. B. für ein iframe in Moodle).
 
+## Tests
+
+```sh
+cd tests && npm install && npx playwright install chromium
+BASE=http://localhost:8080/ npm run rauch                       # Seite ohne Übungen (läuft auch bei jedem Push auf GitHub)
+BASE=https://uebungen.example.org/ BENUTZER=… PASSWORT=… npm run abnahme   # volle Abnahme gegen eine Instanz
+```
+
+Die Abnahme prüft Navigation, Content-Security-Policy (auch im Player-Rahmen), dass keine fremden Server angefragt
+werden und nichts im Browser gespeichert wird, YouTube nur nach Zustimmung, Formeln lokal, axe (WCAG 2.2 AA) hell und
+dunkel, 320 px und eine Stichprobe mit jeder Übungsart.
+
 ## Fächer
 
 Der Originalserver kannte keine Fächer. `katalog/faecher.json` ordnet jede Übung einem Fach zu: wo möglich nach der
