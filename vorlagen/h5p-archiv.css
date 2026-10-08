@@ -444,11 +444,12 @@ mark { background: var(--marker); color: var(--graphit); border-radius: 2px; pad
 .text-seite main.innen { max-width: calc(760px + 2 * var(--rand)); }
 .text-seite h1 { margin: 44px 0 16px; font-size: clamp(2.2rem, 1.5rem + 2.6vw, 3.4rem); line-height: 1.05; }
 .text-seite h2 { margin: 44px 0 12px; font-size: 1.4rem; }
-.text-seite p, .text-seite li { max-width: 68ch; }
+/* nur im Inhalt: Kopf und Fuß (Linkliste) bleiben, wie sie sind */
+.text-seite main p, .text-seite main li { max-width: 68ch; }
 /* lange deutsche Wörter (Datenschutzerklärung, Aufsichtsbehörde) auf schmalen Bildschirmen trennen */
-.text-seite h1, .text-seite h2, .text-seite p, .text-seite li { -webkit-hyphens: auto; hyphens: auto; overflow-wrap: break-word; }
+.text-seite main :is(h1, h2, p, li) { -webkit-hyphens: auto; hyphens: auto; overflow-wrap: break-word; }
 .text-seite .einleitung { font-size: 1.2rem; color: var(--graphit-leise); }
-.text-seite li + li { margin-top: 6px; }
+.text-seite main li + li { margin-top: 6px; }
 .zahlen { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
 .zahlen th, .zahlen td { padding: 10px 0; border-bottom: 1px solid var(--linie); text-align: left; vertical-align: top; }
 .zahlen th { font-weight: 500; color: var(--graphit-leise); padding-right: 24px; }
