@@ -46,13 +46,15 @@ uebungen.example.org {
 ## Andere Webserver (Beispiel nginx)
 
 Ausgeliefert wird nur `bestand/seite/`. Die Header sind wichtig: die Content-Security-Policy erlaubt genau das, was
-der H5P-Player braucht (der Hash gehört zu dem festen Einzeiler, den der Player in seinen Rahmen schreibt).
+der H5P-Player braucht (der erste Hash gehört zu dem festen Einzeiler, den der Player in seinen Rahmen schreibt). Der
+zweite Hash erlaubt die Vorlade-Regeln in `index.html` und `spielen.html`: damit darf der Browser Übungen vom eigenen
+Server vorladen, bevor man sie anklickt.
 
 ```nginx
 server {
   root /srv/uebungsheft/bestand/seite;
   index index.html;
-  add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-eval' 'sha256-8CniZYrnO46q7MvZ3m08Wom1HH/ZhyXmm29kBKTV1rk=' https://www.youtube.com https://s.ytimg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://i.ytimg.com; font-src 'self' data:; media-src 'self' blob:; frame-src 'self' https:; worker-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'" always;
+  add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-eval' 'sha256-8CniZYrnO46q7MvZ3m08Wom1HH/ZhyXmm29kBKTV1rk=' 'sha256-uOQ4TgnzPuobVoy3JbYGSg6niKl7sRgA8QDtlZuYFzQ=' https://www.youtube.com https://s.ytimg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://i.ytimg.com; font-src 'self' data:; media-src 'self' blob:; frame-src 'self' https:; worker-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'" always;
   add_header X-Content-Type-Options nosniff always;
   add_header Referrer-Policy strict-origin-when-cross-origin always;
   add_header Permissions-Policy "geolocation=(), microphone=(self), camera=()" always;
