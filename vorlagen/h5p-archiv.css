@@ -111,7 +111,8 @@ svg.symbol { width: 1.25em; height: 1.25em; flex: none; fill: none; stroke: curr
 .skip:focus { top: 12px; color: var(--papier); }
 .innen { max-width: var(--breite); margin: 0 auto; padding-inline: var(--rand); }
 .schmal { max-width: calc(1040px + 2 * var(--rand)); }
-mark { background: var(--marker); color: inherit; border-radius: 2px; padding: 0 1px; }
+/* volle Textfarbe statt geerbter (gedämpfter) – sonst im Dunklen nur 3,15:1 auf dem Marker (WCAG 1.4.3) */
+mark { background: var(--marker); color: var(--graphit); border-radius: 2px; padding: 0 1px; }
 .karopapier {
   background-image:
     linear-gradient(var(--karo) 1px, transparent 1px),
@@ -369,7 +370,8 @@ mark { background: var(--marker); color: inherit; border-radius: 2px; padding: 0
   padding: clamp(6px, 1.5vw, 16px); box-shadow: 0 1px 0 rgba(0, 0, 0, .04), 0 24px 40px -28px rgba(20, 30, 50, .45);
 }
 .blatt:focus-visible { outline-offset: 4px; }
-[data-h5p-geladen] .blatt { min-height: 0; }
+/* Mindesthöhe auch nach dem Laden behalten: schrumpft das Blatt auf kurze Übungen, springt alles darunter nach
+   oben (Layout-Verschiebung CLS 0,19); etwas weißes Papier unter kurzen Übungen ist der ruhigere Kompromiss */
 .hinweis { margin: 16px 0; padding: 12px 16px; border-radius: 10px; background: var(--hinweis-grund); color: var(--hinweis); }
 .hinweis.fehler { background: transparent; color: var(--rot); border: 1px solid currentColor; }
 #hinweise:not(:empty) + .blatt { margin-top: 0; }
