@@ -144,9 +144,12 @@ def verlinke(quelle, ziel):
 
 
 def kopiere_baum(quelle, ziel, verlinken=False, vorhandene_lassen=False):
+    """Kopiert (oder verlinkt) alle Dateien; gibt die Zielpfade zurück."""
+    ziele = set()
     for datei in quelle.rglob("*"):
         if datei.is_file():
             neu = ziel / datei.relative_to(quelle)
+            ziele.add(neu)
             if vorhandene_lassen and neu.exists():
                 continue
             if verlinken:
@@ -154,6 +157,17 @@ def kopiere_baum(quelle, ziel, verlinken=False, vorhandene_lassen=False):
             elif not neu.exists() or neu.stat().st_size != datei.stat().st_size:
                 neu.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(datei, neu)
+    return ziele
+
+
+def entferne_uebrige(ordner, behalten):
+    """Dateien in `ordner` löschen, die nicht in `behalten` sind (z. B. eine entfernte Schrift), leere Ordner danach."""
+    for datei in sorted(ordner.rglob("*"), reverse=True):
+        if datei.is_file() and datei not in behalten:
+            datei.unlink()
+            log(f"  veraltet, entfernt: {datei.relative_to(ordner.parent)}")
+        elif datei.is_dir() and not any(datei.iterdir()):
+            datei.rmdir()
 
 
 def sicherer_name(name):
@@ -800,9 +814,10 @@ def cmd_seite(args):
     standalone = bestand.seite / "player" / "standalone"
     if not (VENDOR / "main.bundle.js").exists():
         sys.exit(f"Player fehlt: {VENDOR}/main.bundle.js")
-    kopiere_baum(VENDOR, standalone)
-    kopiere_baum(VORLAGEN / "mathjax", bestand.seite / "player" / "mathjax")
-    kopiere_baum(VORLAGEN / "schriften", bestand.seite / "schriften")
+    # mitgelieferte Teile: kopieren und alles entfernen, was in der aktuellen Version nicht mehr vorkommt
+    for quelle, ziel in ((VENDOR, standalone), (VORLAGEN / "mathjax", bestand.seite / "player" / "mathjax"),
+                         (VORLAGEN / "schriften", bestand.seite / "schriften")):
+        entferne_uebrige(ziel, kopiere_baum(quelle, ziel))
     lokale_bibliotheken(bestand)
 
     faecher = lade_faecher()
@@ -859,6 +874,13 @@ def cmd_seite(args):
         for alt, neu in ersetzen.items():
             text = text.replace(alt, neu)
         schreibe(bestand.seite / vorlage.name, text.encode("utf-8"))
+    # Seiten, Skripte und Stylesheets, die es in Vorlagen und konfig/seiten nicht mehr gibt (z. B. ein entferntes
+    # Impressum), aus seite/ löschen; eigene Dateien gehören nach konfig/seiten/
+    aktuell = {v.name for v in seiten} | {"uebungen.js"}
+    for datei in bestand.seite.iterdir():
+        if datei.is_file() and datei.suffix in (".html", ".js", ".css") and datei.name not in aktuell:
+            datei.unlink()
+            log(f"  veraltet, entfernt: seite/{datei.name}")
 
     with (bestand.seite / "h5p.csv.part").open("w", encoding="utf-8-sig", newline="") as fh:
         w = csv.writer(fh, delimiter=";")
